@@ -16,6 +16,8 @@ class User {
   @Column({unique:true})
   email:string
   @Column()
+  image:string
+  @Column()
   //Pomeni da stora sam ne returna ce fetchamo userja
   @Exclude()
   password:string
