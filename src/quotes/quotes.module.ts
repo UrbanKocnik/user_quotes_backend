@@ -4,6 +4,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { CommonModule } from 'src/common/common.module';
 import Quote from 'src/database/entity/quote.entity';
 import { QuoteService } from './quotes.service';
+import { QuotesController } from './quotes.controller';
 
 @Module({
   providers: [QuoteService],
@@ -12,6 +13,7 @@ import { QuoteService } from './quotes.service';
     CommonModule,
     AuthModule
   ],
-  exports:[QuoteService]
+  exports:[QuoteService],
+  controllers: [QuotesController]
 })
 export class QuotesModule {}
