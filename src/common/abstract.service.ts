@@ -9,7 +9,7 @@ export abstract class AbstractService {
 
     async all(relations: any[] = []): Promise<any[]>{
         return await this.repository.find({relations});
-    }
+    }    
 
     async create(data): Promise<any>{
         

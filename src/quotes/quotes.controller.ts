@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, Controller, Get, Param, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { QuoteService } from './quotes.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -18,8 +18,11 @@ export class QuotesController {
     }
 
     @Get()
-    async all(){
-        return this.quoteService.sort()
+    async all(
+        @Query('page') page = 1,
+        @Query('condition') condition = "likes"
+    ){
+        return await this.quoteService.paginate(page, condition, ['user']);
     }
 
 
