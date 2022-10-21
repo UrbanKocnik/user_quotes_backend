@@ -14,6 +14,6 @@ export class QuotesController {
 
     @Get()
     async all(){
-        return this.quoteService.all()
+        return this.quoteService.sort()
     }
 }
