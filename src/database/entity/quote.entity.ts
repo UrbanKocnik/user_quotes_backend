@@ -1,4 +1,5 @@
 
+import { Exclude } from 'class-transformer';
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import User from './user.entity';
  
@@ -15,10 +16,14 @@ class Quote {
 
   @Column()
   public dislikes: number;
+
+  @Exclude()
+  @Column()
+  public user_id: number;
   
   @OneToOne(() => User)
-  @JoinColumn({name:'user_id'})
-  user_id: User;
+  @JoinColumn({name:'user'})
+  user: User;
 }
  
 export default Quote;
