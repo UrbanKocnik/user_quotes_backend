@@ -68,7 +68,6 @@ export class AuthController {
         const id = await this.authService.userId(request)
         
         const user = await this.userService.findOneRelations({id}) 
-        console.log(user)
         return user;
     }
 

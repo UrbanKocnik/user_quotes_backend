@@ -17,7 +17,6 @@ export abstract class AbstractService {
     }
 
     async findOneRelations(where, relations:any[] = []): Promise<any[]>{
-        console.log(where)
         const relations1 = this.repository.find({
             where,
             relations

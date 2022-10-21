@@ -1,27 +1,26 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 import {Request} from 'express'
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { UsersService } from './users.service';
+import { QuoteService } from 'src/quotes/quotes.service';
+import { QuoteUpdateDto } from 'src/quotes/dtos/quote-update.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('me')
 export class UsersController {
     
-    constructor(private userService: UsersService,
-        private authService: AuthService){}
+    constructor(
+        private userService: UsersService,
+        private authService: AuthService,
+        private quoteService: QuoteService){}
 
     @Get()
     async me(@Req() request: Request){
         const id = await this.authService.userId(request);
-        return this.userService.findOneRelations({id})
-    }
-
-    @Get(':id')
-    async get(@Param('id') id:number){
         return this.userService.findOneRelations({id})
     }
 
@@ -50,5 +49,38 @@ export class UsersController {
             password: hash
         })
         return this.userService.findOneRelations({id})
+    }
+
+    @Post('myquote')
+    async addQuote(
+        @Body() body: QuoteUpdateDto,
+        @Req() request: Request)
+    {
+        const user_id = await this.authService.userId(request)
+        const user = await this.userService.findOneRelations({id: user_id})
+        return this.quoteService.create({
+            quote: body.quote,
+            likes: 0,
+            dislikes: 0,
+            user_id,
+            user: user_id
+        })
+    }
+
+    @Put('myquote/:id')
+    async update(@Param('id') id:number,
+    @Body() body: QuoteUpdateDto,
+    @Req() request: Request){
+        //seperate role id from data (optional lahka isto ko pa create)
+        
+        const uid = await this.authService.userId(request);
+        const quote = await this.quoteService.findOneRelations({id})
+        console.log(quote)
+        
+
+        if(uid === quote[0].user_id){
+            await this.quoteService.update(id, body)
+        }
+        return this.quoteService.findOneRelations({id})
     }
 }

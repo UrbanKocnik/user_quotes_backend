@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 @Module({
     imports: [
       forwardRef(()=>UsersModule),
-      CommonModule
+      CommonModule     
       ],
     controllers: [AuthController],
     providers: [AuthService],
