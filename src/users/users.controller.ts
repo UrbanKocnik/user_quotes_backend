@@ -5,14 +5,17 @@ import { AuthService } from 'src/auth/auth.service';
 import {Request} from 'express'
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { UsersService } from './users.service';
+import { QuoteService } from 'src/quotes/quotes.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UseGuards(AuthGuard)
 @Controller('me')
 export class UsersController {
     
-    constructor(private userService: UsersService,
-        private authService: AuthService){}
+    constructor(
+        private userService: UsersService,
+        private authService: AuthService,
+        private quoteService: QuoteService){}
 
     @Get()
     async me(@Req() request: Request){
