@@ -7,8 +7,17 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class QuoteService extends AbstractService {
     constructor(
-        @InjectRepository(Quote) private readonly QuoteRepository: Repository<Quote>
+        @InjectRepository(Quote) private readonly quoteRepository: Repository<Quote>
     ){
-        super(QuoteRepository)
+        super(quoteRepository)
+    }
+
+    async sort(){
+        const q = this.quoteRepository.query(`
+        SELECT q.quote, q.likes, q.dislikes, u.first_name, u.last_name
+        FROM quotes q
+        JOIN users u on q.user_id = u.id
+        ORDER BY likes DESC;`)
+        return q;
     }
 }
