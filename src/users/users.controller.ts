@@ -75,9 +75,7 @@ export class UsersController {
         
         const uid = await this.authService.userId(request);
         const quote = await this.quoteService.findOneRelations({id})
-        console.log(quote)
         
-
         if(uid === quote[0].user_id){
             await this.quoteService.update(id, body)
         }
