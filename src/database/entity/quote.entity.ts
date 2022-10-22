@@ -1,6 +1,6 @@
 
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import User from './user.entity';
 import Vote from './votes.entity';
  
@@ -17,6 +17,14 @@ class Quote {
 
   @Column()
   public dislikes: number;
+
+  @CreateDateColumn()
+  @Exclude()
+  public created_at: Date
+
+  @UpdateDateColumn()
+  @Exclude()
+  public updated_at: Date
 
   @Exclude()
   @Column()
