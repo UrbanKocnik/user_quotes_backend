@@ -31,8 +31,7 @@ export class AuthController {
         body.password = hash;
         //creating the user entry through user service method
         return this.userService.create({
-            first_name: body.first_name,
-            last_name: body.last_name,
+            username: body.username,
             email: body.email,
             image: body.image,
             password: hash,
@@ -41,13 +40,13 @@ export class AuthController {
 
     @Post('login')
     async login(
-    @Body('email') email:string,
+    @Body('username') username:string,
     @Body('password') password:string,
     //passthrough omogoca da dobima cookies iz frontenda in imam dostop do njih v backendu
     @Res({passthrough:true}) response: Response 
     ){
         //posle v service mail da najde pravega userja
-        const user = await this.userService.findOneRelations({email});
+        const user = await this.userService.findOneRelations({username});
         if(!user){
             throw new NotFoundException('user not found');
         }

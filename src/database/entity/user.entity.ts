@@ -9,11 +9,8 @@ class User {
   @PrimaryGeneratedColumn()
   public id: number;
  
-  @Column()
-  public first_name: string;
- 
-  @Column()
-  public last_name: string;
+  @Column({unique: true})
+  public username: string;
 
   @Column({unique:true})
   email:string
