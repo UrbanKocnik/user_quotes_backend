@@ -30,6 +30,14 @@ export class QuotesController {
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
+
+        //check if this is users quote
+        if(id === quote[0].user_id){
+            return ({
+                error: "Cannot rate your own quote."
+            })
+        }
+
         //searches if the user already rated this quote
         const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id})
         
@@ -67,6 +75,14 @@ export class QuotesController {
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
+
+        //check if this is users quote
+        if(id === quote[0].user_id){
+            return ({
+                error: "Cannot rate your own quote."
+            })
+        }
+
         //searches if the user already rated this quote
         const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id: quote_id})
         
