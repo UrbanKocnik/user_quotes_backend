@@ -6,6 +6,7 @@ import { CommonModule } from 'src/common/common.module';
 import { AuthModule } from 'src/auth/auth.module';
 import User from 'src/database/entity/user.entity';
 import { QuotesModule } from 'src/quotes/quotes.module';
+import Vote from 'src/database/entity/votes.entity';
 
 @Module({
   imports:[

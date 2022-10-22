@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import User from './entity/user.entity';
 import Quote from './entity/quote.entity';
+import Vote from './entity/votes.entity';
  
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import Quote from './entity/quote.entity';
         database: configService.get('POSTGRES_DB'),
         entities: [
             User,
-            Quote
+            Quote,
+            Vote
           //__dirname + '/../**/entities/*.entity.ts',
         ],
         synchronize: true,

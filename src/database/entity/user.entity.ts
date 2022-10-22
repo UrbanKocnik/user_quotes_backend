@@ -1,6 +1,8 @@
 
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Quote from './quote.entity';
+import Vote from './votes.entity';
  
 @Entity({name: 'users'})
 class User {
@@ -21,6 +23,9 @@ class User {
   //Pomeni da stora sam ne returna ce fetchamo userja
   @Exclude()
   password:string
+
+  @OneToMany(() => Vote, (vote: Vote) => vote.userId)
+  public votes: Vote[];
 }
  
 export default User;
