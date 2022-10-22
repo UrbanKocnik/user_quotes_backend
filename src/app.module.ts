@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { QuoteService } from './quotes/quotes.service';
 import { QuotesModule } from './quotes/quotes.module';
+import { VotesModule } from './votes/votes.module';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -22,7 +23,7 @@ import * as Joi from '@hapi/joi';
       POSTGRES_DB: Joi.string().required(),
       PORT: Joi.number(),
     })
-  }), DatabaseModule, UsersModule, AuthModule, CommonModule, QuotesModule],
+  }), DatabaseModule, UsersModule, AuthModule, CommonModule, QuotesModule, VotesModule],
   controllers: [AppController],
   providers: [AppService],
 })
