@@ -101,7 +101,7 @@ export class QuotesController {
 
     @Get(':id')
     async get(@Param('id') id:number){
-        return this.quoteService.findOneRelations({id}, ['votes'])
+        return this.quoteService.findOneRelations({id}, ['user'])
     }
 
     @Get()
