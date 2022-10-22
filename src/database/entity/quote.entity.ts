@@ -26,8 +26,8 @@ class Quote {
   @JoinColumn({name:'user'})
   user: User;
 
-  @OneToMany(() => Vote, (vote) => vote.quote)
-  public votes!: Vote[];
+  @OneToMany(() => Vote, (vote: Vote) => vote.quoteId)
+  public votes: Vote[];
 }
  
 export default Quote;

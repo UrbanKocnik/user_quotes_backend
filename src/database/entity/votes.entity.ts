@@ -20,11 +20,13 @@ class Vote {
   @Column()
   public quote_id: number;
 
-  @ManyToOne(() => Quote, (quote) => quote.votes)
-    public quote!: Quote
+  @ManyToOne(() => Quote)
+  @JoinColumn({name:'quoteId'})
+  quoteId: Quote;
  
-  @ManyToOne(() => User, (user) => user.votes)
-    public user!: User
+  @ManyToOne(() => User)
+  @JoinColumn({name:'userId'})
+  userId: User;
 }
  
 export default Vote;

@@ -24,8 +24,8 @@ class User {
   @Exclude()
   password:string
 
-  @OneToMany(() => Vote, (vote) => vote.user)
-  public votes!: Vote[];
+  @OneToMany(() => Vote, (vote: Vote) => vote.userId)
+  public votes: Vote[];
 }
  
 export default User;

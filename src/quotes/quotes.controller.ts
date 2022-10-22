@@ -35,13 +35,11 @@ export class QuotesController {
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
-            return await this.voteService.create({
+            return await this.voteService.createVote({
                 rating: true,
                 user_id: id,
-                quote_id,
-                quoteId: quote[0],
-                userId: user[0]
-            });
+                quote_id
+            }, user[0], quote[0]);
         }
         else{
             //if the user has rate the quote we check the rating
@@ -53,7 +51,7 @@ export class QuotesController {
                 return await this.voteService.findOneRelations({user_id: id, quote_id}) 
             }
             else{
-                return "Already liked"
+                return ({message: "Already liked"})
             }
         }
 
@@ -70,17 +68,16 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
         //searches if the user already rated this quote
-        const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id})
+        const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id: quote_id})
+        
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
-            return await this.voteService.create({
+            return await this.voteService.createVote({
                 rating: false,
                 user_id: id,
-                quote_id,
-                quoteId: quote[0],
-                userId: user[0]
-            });
+                quote_id
+            }, user[0], quote[0]);
         }
         else{
             //if the user has rate the quote we check the rating
@@ -92,7 +89,7 @@ export class QuotesController {
                 return await this.voteService.findOneRelations({user_id: id, quote_id})     
             }
             else{
-                return "Already disliked"
+                return ({message: "Already disliked"})
             }
         }
 
