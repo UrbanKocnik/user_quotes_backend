@@ -17,10 +17,6 @@ export class VotesService extends AbstractService {
 
     async findRatings(quote: Quote, user: User){
         return this.voteRepository.find({
-            relations: {
-                user: true,
-                quote: true
-            },
             where: {
                 user: {
                     id: user.id

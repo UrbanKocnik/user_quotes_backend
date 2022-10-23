@@ -54,7 +54,7 @@ export class QuotesController {
                 await this.voteService.update(prev_rating[0].id,{
                     rating: true
                 })        
-                return await this.voteService.findRatings(quote[0], user[0])
+                return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes'])  
             }
             else{
                 return ({message: "Already liked"})
@@ -99,7 +99,7 @@ export class QuotesController {
                 await this.voteService.update(prev_rating[0].id,{
                     rating: false
                 })     
-                return await this.voteService.findRatings(quote[0], user[0])    
+                return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes'])    
             }
             else{
                 return ({message: "Already disliked"})
