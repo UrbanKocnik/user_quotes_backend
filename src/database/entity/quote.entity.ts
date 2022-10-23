@@ -1,6 +1,6 @@
 
 import { Exclude, Expose } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import {User} from './user.entity';
 import { Vote } from './votes.entity';
  
@@ -30,9 +30,9 @@ export class Quote {
   @Column()
   public user_id: number;
   
-  @OneToOne(() => User)
-  @JoinColumn({name:'user'})
-  user: User;
+  @ManyToOne(() => User, user => user.quotes)
+  @JoinColumn({name:'userId'})
+  userId: User;
 
   @OneToMany(() => Vote, (vote: Vote) => vote.quoteId)
   public votes: Vote[]

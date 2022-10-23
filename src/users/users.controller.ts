@@ -63,6 +63,7 @@ export class UsersController {
             likes: 0,
             dislikes: 0,
             user_id,
+            userId: user[0],
             user: user_id
         })
     }

@@ -31,6 +31,8 @@ export class AuthController {
         body.password = hash;
         //creating the user entry through user service method
         return this.userService.create({
+            first_name: body.first_name,
+            last_name: body.last_name,
             username: body.username,
             email: body.email,
             image: body.image,
