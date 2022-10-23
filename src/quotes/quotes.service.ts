@@ -14,10 +14,9 @@ export class QuoteService extends AbstractService {
     }
 
     async randomQuote(){
-        const q = this.quoteRepository.query(`
-        SELECT q.quote, q.likes, q.dislikes, u.first_name, u.last_name
+        const q = await this.quoteRepository.query(`
+        SELECT q.id
         FROM quotes q
-        JOIN users u on q.user_id = u.id
         ORDER BY RANDOM()
         LIMIT 1;`)
         return q;
