@@ -37,7 +37,6 @@ export class Quote {
 
   @Expose()
   get upvotes(): number{
-    console.log(this.votes)
     if(!this.votes){
       return 0;
     }
