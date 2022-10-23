@@ -31,9 +31,6 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
-        const likes = quote[0].likes + 1
-        const dislikes = quote[0].dislikes
-
         //check if this is users quote
         if(id === quote[0].user_id){
             return ({
@@ -42,14 +39,14 @@ export class QuotesController {
         }
 
         //searches if the user already rated this quote
-        const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id})
+        const prev_rating = await this.voteService.findRatings(quote[0], user[0])
+        console.log(prev_rating)
+
+        
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
-            await this.quoteService.updateRating(quote_id, {
-                likes,
-                dislikes
-            })
+
             return await this.voteService.createVote({
                 rating: true,
                 user_id: id,
@@ -59,10 +56,6 @@ export class QuotesController {
         else{
             //if the user has rate the quote we check the rating
             if(!prev_rating[0].rating){
-                await this.quoteService.updateRating(quote_id, {
-                    likes,
-                    dislikes: dislikes - 1
-                }) 
                 await this.voteService.update(prev_rating[0].id,{
                     rating: true
                 })        
@@ -86,9 +79,6 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
-        const likes = quote[0].likes
-        const dislikes = quote[0].dislikes + 1
-
         //check if this is users quote
         if(id === quote[0].user_id){
             return ({
@@ -97,15 +87,11 @@ export class QuotesController {
         }
 
         //searches if the user already rated this quote
-        const prev_rating = await this.voteService.findOneRelations({user_id: id, quote_id: quote_id})
+        const prev_rating = await this.voteService.findRatings(quote[0], user[0])
         
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
-            await this.quoteService.updateRating(quote_id, {
-                likes,
-                dislikes
-            })
 
             return await this.voteService.createVote({
                 rating: false,
@@ -116,15 +102,11 @@ export class QuotesController {
         else{
             //if the user has rate the quote we check the rating
             if(prev_rating[0].rating){
-                await this.quoteService.updateRating(quote_id, {
-                    likes: likes - 1,
-                    dislikes
-                })
 
                 await this.voteService.update(prev_rating[0].id,{
                     rating: false
                 })     
-                return await this.voteService.findOneRelations({user_id: id, quote_id})     
+                return await this.voteService.findRatings(quote[0], user[0])    
             }
             else{
                 return ({message: "Already disliked"})
@@ -136,7 +118,7 @@ export class QuotesController {
 
     @Get(':id')
     async get(@Param('id') id:number){
-        return this.quoteService.findOneRelations({id}, ['user'])
+        return this.quoteService.findOneRelations({id}, ['votes'])
     }
 
     @Get()

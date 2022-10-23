@@ -15,13 +15,36 @@ export class VotesService extends AbstractService {
         super(voteRepository)
     }
 
+    async findRatings(quote: Quote, user: User){
+        return this.voteRepository.find({
+            relations: {
+                user: true,
+                quote: true
+            },
+            where: {
+                user: {
+                    id: user.id
+                },
+                quote: {
+                    id: quote.id
+                }
+            },
+        })
+    }
+
     async createVote(data: VoteCreateDto, user: User, quote: Quote): Promise<Vote>
     {
+        const vote = new Vote();
+        vote.user = user;
+        vote.quote = quote;
+        vote.rating = data.rating
+        vote.user_id = data.user_id
+        vote.quote_id = data.quote_id;/*
         const newVote = {
             ...data,
             userId: user,
             quoteId: quote
-          };
-        return this.voteRepository.save(newVote);
+          };*/
+        return this.voteRepository.save(vote);
     }
 }

@@ -31,19 +31,21 @@ export class Quote {
   public user_id: number;
   
   @ManyToOne(() => User, user => user.quotes)
-  @JoinColumn({name:'userId'})
-  userId: User;
+  user: User;
 
-  @OneToMany(() => Vote, (vote: Vote) => vote.quoteId)
+  @OneToMany(() => Vote, (vote: Vote) => vote.quote)
   public votes: Vote[]
 
   @Expose()
   get ratingSum(): number{
-    return this.likes - this.dislikes
+    return this.upvoteNumber - this.downvoteNumber
   }
-/*
+
   @Expose()
   get upvoteNumber(): number{
+    if(!this.votes){
+      return 0;
+    }
     return this.votes.reduce((accumulator, vote) => {
       if (vote.rating) {
         return accumulator + 1;
@@ -55,6 +57,9 @@ export class Quote {
 
   @Expose()
   get downvoteNumber(): number{
+    if(!this.votes){
+      return 0;
+    }
     return this.votes.reduce((accumulator: number, vote: Vote) => {
       if (!vote.rating) {
         return accumulator + 1;
@@ -62,7 +67,7 @@ export class Quote {
     
       return accumulator;
     }, 0);
-  }*/
+  }
 }
  
 export default Quote;

@@ -21,12 +21,10 @@ export class Vote {
   public quote_id: number;
 
   @ManyToOne(() => Quote, quote => quote.votes)
-  @JoinColumn({name:'quoteId'})
-  quoteId: Quote;
+  quote: Quote;
  
   @ManyToOne(() => User, user => user.votes)
-  @JoinColumn({name:'userId'})
-  userId: User;
+  user: User;
 }
 
 export default Vote;

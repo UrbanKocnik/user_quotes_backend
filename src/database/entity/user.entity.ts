@@ -23,10 +23,10 @@ export class User {
   @Exclude()
   password:string
 
-  @OneToMany(() => Vote, (vote: Vote) => vote.userId)
+  @OneToMany(() => Vote, (vote: Vote) => vote.user)
   public votes: Vote[];
 
-  @OneToMany(() => Quote, (quote: Quote) => quote.userId)
+  @OneToMany(() => Quote, (quote: Quote) => quote.user)
   public quotes: Quote[];
 }
  
