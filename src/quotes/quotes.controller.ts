@@ -17,7 +17,8 @@ export class QuotesController {
 
     @Get('random')
     async random(){
-        return this.quoteService.randomQuote()
+        const quote = await this.quoteService.randomQuote()
+        return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes'])
     }
 
     @UseGuards(AuthGuard)
