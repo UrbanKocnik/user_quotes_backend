@@ -65,9 +65,10 @@ export class UsersController {
     }
 
     @Put('myquote/:id')
-    async update(@Param('id') id:number,
-    @Body() body: QuoteUpdateDto,
-    @Req() request: Request){
+    async update(
+        @Param('id') id:number,
+        @Body() body: QuoteUpdateDto,
+        @Req() request: Request){
         
         const uid = await this.authService.userId(request);
         const quote = await this.quoteService.findOneRelations({id}, ['user'])
@@ -81,5 +82,22 @@ export class UsersController {
             })
         }
         return this.quoteService.findOneRelations({id})
+    }
+
+    @Delete('myquote/:id')
+    async delete(
+        @Param('id') id:number,
+        @Req() request: Request){
+        const uid = await this.authService.userId(request);
+        const quote = await this.quoteService.findOneRelations({id}, ['user'])
+        
+        if(uid === quote[0].user.id){
+            await this.quoteService.delete(id)
+        }
+        else{
+            return({
+                error: "Not your quote!"
+            })
+        }
     }
 }

@@ -11,7 +11,9 @@ export class Vote {
  
   @Column()
   public rating: boolean;
-  @ManyToOne(() => Quote, quote => quote.votes)
+  @ManyToOne(() => Quote, quote => quote.votes, {
+    onDelete: 'CASCADE'
+  })
   quote: Quote;
  
   @ManyToOne(() => User, user => user.votes)

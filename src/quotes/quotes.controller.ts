@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, Controller, Get, Param, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
@@ -122,5 +122,4 @@ export class QuotesController {
     ){
         return await this.quoteService.paginate(page, condition, ['votes', 'user']);
     }
-
 }
