@@ -1,6 +1,6 @@
 
 import { Exclude, Expose } from 'class-transformer';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import {User} from './user.entity';
 import { Vote } from './votes.entity';
  
@@ -26,27 +26,33 @@ export class Quote {
   @OneToMany(() => Vote, (vote: Vote) => vote.quote)
   public votes: Vote[]
 
+  @Column({nullable: true})
+  @Exclude()
+  public likes!: number;
+
   @Expose()
   get ratingSum(): number{
-    return this.likes - this.dislikes
+    return this.upvotes - this.downvotes
   }
 
   @Expose()
-  get likes(): number{
+  get upvotes(): number{
+    console.log(this.votes)
     if(!this.votes){
       return 0;
     }
-    return this.votes.reduce((accumulator, vote) => {
+    this.likes = this.votes.reduce((accumulator, vote) => {
       if (vote.rating) {
         return accumulator + 1;
       }
     
       return accumulator;
     }, 0);
+    return this.likes
   }
 
   @Expose()
-  get dislikes(): number{
+  get downvotes(): number{
     if(!this.votes){
       return 0;
     }

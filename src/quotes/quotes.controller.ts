@@ -111,7 +111,7 @@ export class QuotesController {
 
     @Get(':id')
     async get(@Param('id') id:number){
-        return this.quoteService.findOneRelations({id}, ['user'])
+        return this.quoteService.findOneRelations({id}, ['votes', 'user'])
     }
 
     @Get()
@@ -119,7 +119,7 @@ export class QuotesController {
         @Query('page') page = 1,
         @Query('condition') condition = "likes"
     ){
-        return await this.quoteService.paginate(page, condition, ['user']);
+        return await this.quoteService.paginate(page, condition, ['votes', 'user']);
     }
 
 }
