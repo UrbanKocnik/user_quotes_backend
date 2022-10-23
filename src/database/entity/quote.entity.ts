@@ -1,11 +1,11 @@
 
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import User from './user.entity';
-import Vote from './votes.entity';
+import {User} from './user.entity';
+import { Vote } from './votes.entity';
  
-@Entity({name: 'quotes'})
-class Quote {
+@Entity('quotes')
+export class Quote {
   @PrimaryGeneratedColumn()
   public id: number;
  
@@ -35,7 +35,34 @@ class Quote {
   user: User;
 
   @OneToMany(() => Vote, (vote: Vote) => vote.quoteId)
-  public votes: Vote[];
+  public votes: Vote[]
+
+  @Expose()
+  get ratingSum(): number{
+    return this.likes - this.dislikes
+  }
+/*
+  @Expose()
+  get upvoteNumber(): number{
+    return this.votes.reduce((accumulator, vote) => {
+      if (vote.rating) {
+        return accumulator + 1;
+      }
+    
+      return accumulator;
+    }, 0);
+  }
+
+  @Expose()
+  get downvoteNumber(): number{
+    return this.votes.reduce((accumulator: number, vote: Vote) => {
+      if (!vote.rating) {
+        return accumulator + 1;
+      }
+    
+      return accumulator;
+    }, 0);
+  }*/
 }
  
 export default Quote;

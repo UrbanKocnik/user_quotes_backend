@@ -31,6 +31,9 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
+        const likes = quote[0].likes + 1
+        const dislikes = quote[0].dislikes
+
         //check if this is users quote
         if(id === quote[0].user_id){
             return ({
@@ -43,6 +46,10 @@ export class QuotesController {
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
+            await this.quoteService.updateRating(quote_id, {
+                likes,
+                dislikes
+            })
             return await this.voteService.createVote({
                 rating: true,
                 user_id: id,
@@ -52,7 +59,10 @@ export class QuotesController {
         else{
             //if the user has rate the quote we check the rating
             if(!prev_rating[0].rating){
-                //await this.voteService.delete(prev_rating[0].id)  
+                await this.quoteService.updateRating(quote_id, {
+                    likes,
+                    dislikes: dislikes - 1
+                }) 
                 await this.voteService.update(prev_rating[0].id,{
                     rating: true
                 })        
@@ -76,6 +86,9 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
+        const likes = quote[0].likes
+        const dislikes = quote[0].dislikes + 1
+
         //check if this is users quote
         if(id === quote[0].user_id){
             return ({
@@ -89,6 +102,11 @@ export class QuotesController {
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
+            await this.quoteService.updateRating(quote_id, {
+                likes,
+                dislikes
+            })
+
             return await this.voteService.createVote({
                 rating: false,
                 user_id: id,
@@ -98,7 +116,11 @@ export class QuotesController {
         else{
             //if the user has rate the quote we check the rating
             if(prev_rating[0].rating){
-                //await this.voteService.delete(prev_rating[0].id)  
+                await this.quoteService.updateRating(quote_id, {
+                    likes: likes - 1,
+                    dislikes
+                })
+
                 await this.voteService.update(prev_rating[0].id,{
                     rating: false
                 })     

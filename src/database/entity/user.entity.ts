@@ -1,11 +1,10 @@
 
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import Quote from './quote.entity';
-import Vote from './votes.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {Vote} from './votes.entity';
  
-@Entity({name: 'users'})
-class User {
+@Entity('users')
+export class User {
   @PrimaryGeneratedColumn()
   public id: number;
  
@@ -17,7 +16,6 @@ class User {
   @Column()
   image:string
   @Column()
-  //Pomeni da stora sam ne returna ce fetchamo userja
   @Exclude()
   password:string
 
