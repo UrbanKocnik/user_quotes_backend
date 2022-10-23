@@ -1,11 +1,11 @@
 
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import Quote from './quote.entity';
-import User from './user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {Quote} from './quote.entity';
+import {User} from './user.entity';
  
-@Entity({name: 'votes'})
-class Vote {
+@Entity('votes')
+export class Vote {
   @PrimaryGeneratedColumn()
   public id: number;
  
@@ -20,13 +20,13 @@ class Vote {
   @Column()
   public quote_id: number;
 
-  @ManyToOne(() => Quote)
+  @ManyToOne(() => Quote, quote => quote.votes)
   @JoinColumn({name:'quoteId'})
   quoteId: Quote;
  
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, user => user.votes)
   @JoinColumn({name:'userId'})
   userId: User;
 }
- 
+
 export default Vote;
