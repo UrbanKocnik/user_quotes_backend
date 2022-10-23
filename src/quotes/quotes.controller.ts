@@ -32,25 +32,20 @@ export class QuotesController {
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
         //check if this is users quote
-        if(id === quote[0].user_id){
+        if(user === quote[0].user){
             return ({
                 error: "Cannot rate your own quote."
             })
         }
 
         //searches if the user already rated this quote
-        const prev_rating = await this.voteService.findRatings(quote[0], user[0])
-        console.log(prev_rating)
-
-        
+        const prev_rating = await this.voteService.findRatings(quote[0], user[0])        
         
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
 
             return await this.voteService.createVote({
-                rating: true,
-                user_id: id,
-                quote_id
+                rating: true
             }, user[0], quote[0]);
         }
         else{
@@ -59,7 +54,7 @@ export class QuotesController {
                 await this.voteService.update(prev_rating[0].id,{
                     rating: true
                 })        
-                return await this.voteService.findOneRelations({user_id: id, quote_id}) 
+                return await this.voteService.findRatings(quote[0], user[0])
             }
             else{
                 return ({message: "Already liked"})
@@ -79,8 +74,10 @@ export class QuotesController {
         const user = await this.userService.findOneRelations({id})
         const quote = await this.quoteService.findOneRelations({id: quote_id});
 
+        console.log(user)
+        console.log('quote user',  quote[0].user)
         //check if this is users quote
-        if(id === quote[0].user_id){
+        if(user == quote[0].user){
             return ({
                 error: "Cannot rate your own quote."
             })
@@ -94,9 +91,7 @@ export class QuotesController {
         if(prev_rating.length == 0){
 
             return await this.voteService.createVote({
-                rating: false,
-                user_id: id,
-                quote_id
+                rating: false
             }, user[0], quote[0]);
         }
         else{
@@ -118,7 +113,7 @@ export class QuotesController {
 
     @Get(':id')
     async get(@Param('id') id:number){
-        return this.quoteService.findOneRelations({id}, ['votes'])
+        return this.quoteService.findOneRelations({id}, ['user'])
     }
 
     @Get()

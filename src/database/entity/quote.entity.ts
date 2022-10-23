@@ -11,12 +11,6 @@ export class Quote {
  
   @Column()
   public quote: string;
- 
-  @Column()
-  public likes: number;
-
-  @Column()
-  public dislikes: number;
 
   @CreateDateColumn()
   @Exclude()
@@ -25,10 +19,6 @@ export class Quote {
   @UpdateDateColumn()
   @Exclude()
   public updated_at: Date
-
-  @Exclude()
-  @Column()
-  public user_id: number;
   
   @ManyToOne(() => User, user => user.quotes)
   user: User;
@@ -38,11 +28,11 @@ export class Quote {
 
   @Expose()
   get ratingSum(): number{
-    return this.upvoteNumber - this.downvoteNumber
+    return this.likes - this.dislikes
   }
 
   @Expose()
-  get upvoteNumber(): number{
+  get likes(): number{
     if(!this.votes){
       return 0;
     }
@@ -56,7 +46,7 @@ export class Quote {
   }
 
   @Expose()
-  get downvoteNumber(): number{
+  get dislikes(): number{
     if(!this.votes){
       return 0;
     }

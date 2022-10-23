@@ -11,15 +11,6 @@ export class Vote {
  
   @Column()
   public rating: boolean;
-
-  @Exclude()
-  @Column()
-  public user_id: number;
-
-  @Exclude()
-  @Column()
-  public quote_id: number;
-
   @ManyToOne(() => Quote, quote => quote.votes)
   quote: Quote;
  

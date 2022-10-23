@@ -38,13 +38,6 @@ export class VotesService extends AbstractService {
         vote.user = user;
         vote.quote = quote;
         vote.rating = data.rating
-        vote.user_id = data.user_id
-        vote.quote_id = data.quote_id;/*
-        const newVote = {
-            ...data,
-            userId: user,
-            quoteId: quote
-          };*/
         return this.voteRepository.save(vote);
     }
 }

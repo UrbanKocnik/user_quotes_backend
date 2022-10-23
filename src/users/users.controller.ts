@@ -60,11 +60,7 @@ export class UsersController {
         const user = await this.userService.findOneRelations({id: user_id})
         return this.quoteService.create({
             quote: body.quote,
-            likes: 0,
-            dislikes: 0,
-            user_id,
-            userId: user[0],
-            user: user_id
+            user: user[0]
         })
     }
 
@@ -72,13 +68,17 @@ export class UsersController {
     async update(@Param('id') id:number,
     @Body() body: QuoteUpdateDto,
     @Req() request: Request){
-        //seperate role id from data (optional lahka isto ko pa create)
         
         const uid = await this.authService.userId(request);
         const quote = await this.quoteService.findOneRelations({id})
         
-        if(uid === quote[0].user_id){
+        if(uid === quote[0].user.id){
             await this.quoteService.update(id, body)
+        }
+        else{
+            return({
+                error: "Not your quote!"
+            })
         }
         return this.quoteService.findOneRelations({id})
     }
