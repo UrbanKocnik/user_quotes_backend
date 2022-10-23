@@ -29,10 +29,10 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id});
+        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user']);
 
         //check if this is users quote
-        if(user === quote[0].user){
+        if(user[0].id === quote[0].user.id){
             return ({
                 error: "Cannot rate your own quote."
             })
@@ -72,12 +72,10 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id});
+        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user']);
 
-        console.log(user)
-        console.log('quote user',  quote[0].user)
         //check if this is users quote
-        if(user == quote[0].user){
+        if(user[0].id === quote[0].user.id){
             return ({
                 error: "Cannot rate your own quote."
             })

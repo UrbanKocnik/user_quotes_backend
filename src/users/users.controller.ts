@@ -70,7 +70,7 @@ export class UsersController {
     @Req() request: Request){
         
         const uid = await this.authService.userId(request);
-        const quote = await this.quoteService.findOneRelations({id})
+        const quote = await this.quoteService.findOneRelations({id}, ['user'])
         
         if(uid === quote[0].user.id){
             await this.quoteService.update(id, body)
