@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, Controller, Get, Param, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { ClassSerializerInterceptor, Controller, Delete, Get, Param, Post, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
@@ -30,7 +30,7 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user']);
+        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
 
         //check if this is users quote
         if(user[0].id === quote[0].user.id){
@@ -45,9 +45,17 @@ export class QuotesController {
         //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
 
-            return await this.voteService.createVote({
+            await this.voteService.createVote({
                 rating: true
             }, user[0], quote[0]);
+
+            
+            const likes = quote[0].upvotes
+            const dislikes = quote[0].downvotes
+            const rating = likes - dislikes
+
+            await this.quoteService.updateRating(quote_id, {likes, dislikes, rating})
+            return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes']) 
         }
         else{
             //if the user has rate the quote we check the rating
@@ -55,6 +63,12 @@ export class QuotesController {
                 await this.voteService.update(prev_rating[0].id,{
                     rating: true
                 })        
+
+                const likes = quote[0].upvotes
+                const dislikes = quote[0].downvotes
+                const rating = likes - dislikes
+
+                await this.quoteService.updateRating(quote_id, {likes, dislikes, rating})
                 return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes'])  
             }
             else{
@@ -73,7 +87,7 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user']);
+        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
 
         //check if this is users quote
         if(user[0].id === quote[0].user.id){
@@ -85,13 +99,19 @@ export class QuotesController {
         //searches if the user already rated this quote
         const prev_rating = await this.voteService.findRatings(quote[0], user[0])
         
-        
-        //if the user hasnt rate the quote yet we create an entry
         if(prev_rating.length == 0){
 
-            return await this.voteService.createVote({
+            await this.voteService.createVote({
                 rating: false
             }, user[0], quote[0]);
+
+            const likes = quote[0].upvotes
+            const dislikes = quote[0].downvotes
+            const rating = likes - dislikes
+
+            await this.quoteService.updateRating(quote_id, {likes, dislikes, rating})
+            return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes']) 
+
         }
         else{
             //if the user has rate the quote we check the rating
@@ -100,6 +120,13 @@ export class QuotesController {
                 await this.voteService.update(prev_rating[0].id,{
                     rating: false
                 })     
+
+                const likes = quote[0].upvotes
+                const dislikes = quote[0].downvotes
+                const rating = likes - dislikes
+
+                await this.quoteService.updateRating(quote_id, {likes, dislikes, rating})
+
                 return await this.quoteService.findOneRelations({id: quote[0].id}, ['user', 'votes'])    
             }
             else{
@@ -122,5 +149,4 @@ export class QuotesController {
     ){
         return await this.quoteService.paginate(page, condition, ['votes', 'user']);
     }
-
 }

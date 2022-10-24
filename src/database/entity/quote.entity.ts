@@ -30,6 +30,14 @@ export class Quote {
   @Exclude()
   public likes!: number;
 
+  @Column({nullable: true})
+  @Exclude()
+  public dislikes!: number;
+
+  @Column({nullable: true})
+  @Exclude()
+  public rating!: number;
+
   @Expose()
   get ratingSum(): number{
     return this.upvotes - this.downvotes
