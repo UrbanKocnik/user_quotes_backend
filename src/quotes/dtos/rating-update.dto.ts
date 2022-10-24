@@ -1,5 +1,5 @@
 export class RatingUpdateDto{
-    dislikes: number
     likes: number
+    dislikes: number
     rating: number
 }
