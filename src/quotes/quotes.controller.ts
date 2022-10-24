@@ -30,7 +30,7 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
+        let quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
 
         //check if this is users quote
         if(user[0].id === quote[0].user.id){
@@ -49,7 +49,7 @@ export class QuotesController {
                 rating: true
             }, user[0], quote[0]);
 
-            
+            quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
             const likes = quote[0].upvotes
             const dislikes = quote[0].downvotes
             const rating = likes - dislikes
@@ -64,6 +64,7 @@ export class QuotesController {
                     rating: true
                 })        
 
+                quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
                 const likes = quote[0].upvotes
                 const dislikes = quote[0].downvotes
                 const rating = likes - dislikes
@@ -87,7 +88,7 @@ export class QuotesController {
         // get current user and rated quote data
         const id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id})
-        const quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
+        let quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
 
         //check if this is users quote
         if(user[0].id === quote[0].user.id){
@@ -105,6 +106,7 @@ export class QuotesController {
                 rating: false
             }, user[0], quote[0]);
 
+            quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
             const likes = quote[0].upvotes
             const dislikes = quote[0].downvotes
             const rating = likes - dislikes
@@ -121,6 +123,7 @@ export class QuotesController {
                     rating: false
                 })     
 
+                quote = await this.quoteService.findOneRelations({id: quote_id}, ['user', 'votes']);
                 const likes = quote[0].upvotes
                 const dislikes = quote[0].downvotes
                 const rating = likes - dislikes
