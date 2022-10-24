@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/common/abstract.service';
 import { PaginatedResult } from 'src/common/paginated-result.interface';
 import Quote from 'src/database/entity/quote.entity';
-import { Repository } from 'typeorm';
+import { Repository, SimpleConsoleLogger } from 'typeorm';
+import { RatingUpdateDto } from './dtos/rating-update.dto';
 
 @Injectable()
 export class QuoteService extends AbstractService {
@@ -11,6 +12,15 @@ export class QuoteService extends AbstractService {
         @InjectRepository(Quote) private readonly quoteRepository: Repository<Quote>
     ){
         super(quoteRepository)
+    }
+
+    async updateRating(id: number, data: RatingUpdateDto){
+        return this.quoteRepository.update(id, {
+            likes: data.likes,
+            dislikes: data.dislikes,
+            rating: data.rating
+
+        });
     }
 
     async randomQuote(){
