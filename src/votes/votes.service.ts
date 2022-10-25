@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/common/abstract.service';
+import { PaginatedResult } from 'src/common/paginated-result.interface';
 import Quote from 'src/database/entity/quote.entity';
 import User from 'src/database/entity/user.entity';
 import Vote from 'src/database/entity/votes.entity';
@@ -35,5 +36,33 @@ export class VotesService extends AbstractService {
         vote.quote = quote;
         vote.rating = data.rating
         return this.voteRepository.save(vote);
+    }
+
+    async paginateLiked(user: User, page = 1, condition = "likes", relations: any[] = ['user', 'quote'], base = 4): Promise<PaginatedResult>{
+
+        const take = base * page;
+        console.log(base, page, take)
+        const [data, total] = await this.repository.findAndCount({
+            order:{
+                quote:{
+                    [condition]: 'DESC'
+                }
+            },
+            where:{
+                user,
+                rating: true
+            },
+            take, 
+            relations
+        });
+        return {
+            
+            data: data,
+            meta:{
+                total,
+                page,
+                last_page: Math.ceil(total / take)
+            }
+        }
     }
 }
