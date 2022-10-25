@@ -34,7 +34,7 @@ export class AuthController {
             first_name: body.first_name,
             last_name: body.last_name,
             email: body.email,
-            image: body.image,
+            image: "body.image",
             password: hash,
         });
     }

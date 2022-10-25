@@ -27,15 +27,12 @@ export class Quote {
   public votes: Vote[]
 
   @Column({nullable: true})
-  @Exclude()
   public likes!: number;
 
   @Column({nullable: true})
-  @Exclude()
   public dislikes!: number;
 
   @Column({nullable: true})
-  @Exclude()
   public rating!: number;
 
   @Expose()
