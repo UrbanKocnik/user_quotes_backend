@@ -14,9 +14,11 @@ export class Vote {
   @ManyToOne(() => Quote, quote => quote.votes, {
     onDelete: 'CASCADE'
   })
+  @JoinColumn({ name: 'quote_id' })
   quote: Quote;
  
   @ManyToOne(() => User, user => user.votes)
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }
 
