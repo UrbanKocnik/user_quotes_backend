@@ -21,7 +21,7 @@ export class UsersController {
     @Get()
     async me(@Req() request: Request){
         const id = await this.authService.userId(request);
-        return this.userService.findOneRelations({id})
+        return this.userService.findOneRelations({id}, ['votes', 'quotes'])
     }
 
     @Put('update-info')

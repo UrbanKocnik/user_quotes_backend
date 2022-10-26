@@ -150,18 +150,31 @@ export class QuotesController {
         return this.voteService.paginateLiked(user[0], page)
     }
 
+    @UseGuards(AuthGuard)
+    @Get('votes')
+    async allVotes(
+        @Req() request: Request,
+    ){
+        const id = await this.authService.userId(request)
+        const user = await this.userService.findOneRelations({id})
+        return this.voteService.findVotes(user[0])
+    }
+
 
     @Get(':id')
     async get(@Param('id') id:number){
         return this.quoteService.findOneRelations({id}, ['votes', 'user'])
     }
 
+
     @Get()
     async all(
         @Query('page') page = 1,
         @Query('condition') condition = "likes",
-        @Query('base') base = 9
+        @Query('base') base = 2
     ){
         return await this.quoteService.paginate(page, condition, ['votes', 'user'], base);
     }
+
+
 }

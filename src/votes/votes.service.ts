@@ -29,6 +29,15 @@ export class VotesService extends AbstractService {
         })
     }
 
+    async findVotes(user: User){
+        const q = await this.voteRepository.query(`
+        SELECT *
+        FROM votes v
+        WHERE v.user_id = ${user.id}
+        `)
+        return q;
+    }
+
     async createVote(data: VoteCreateDto, user: User, quote: Quote): Promise<Vote>
     {
         const vote = new Vote();
