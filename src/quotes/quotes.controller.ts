@@ -15,6 +15,17 @@ export class QuotesController {
         private userService: UsersService,
         private authService: AuthService){}
 
+    @Get('random/rating/:id')
+    async randomRating(
+        @Req() request: Request,
+        @Param('id') quote_id:number
+    ){
+        const id = await this.authService.userId(request)
+        const user = await this.userService.findOneRelations({id})
+        const quote = await this.quoteService.findOneRelations({id: quote_id})
+        return await this.voteService.findRatings(quote[0], user[0])
+    }
+
     @Get('random')
     async random(){
         const quote = await this.quoteService.randomQuote()
