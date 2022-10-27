@@ -50,7 +50,6 @@ export class VotesService extends AbstractService {
     async paginateLiked(user: User, page = 1, condition = "likes", relations: any[] = ['user', 'quote'], base = 4): Promise<PaginatedResult>{
 
         const take = base * page;
-        console.log(base, page, take)
         const [data, total] = await this.repository.findAndCount({
             order:{
                 quote:{
