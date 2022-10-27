@@ -24,6 +24,17 @@ export class UsersController {
         return this.userService.findOneRelations({id}, ['votes', 'quotes'])
     }
 
+    @UseGuards(AuthGuard)
+    @Get('liked')
+    async liked(
+        @Query('page') page = 1,
+        @Req() request: Request,
+    ){
+        const id = await this.authService.userId(request)
+        const user = await this.userService.findOneRelations({id})
+        return this.quoteService.paginateLiked(user[0], page)
+    }
+
     @Put('update-info')
     async updateInfo(
         @Body() body: UserUpdateDto,
@@ -60,7 +71,7 @@ export class UsersController {
     {
         const user_id = await this.authService.userId(request)
         const user = await this.userService.findOneRelations({id: user_id})
-        return this.quoteService.paginateUsersQuotes(user[0], page, condition, [], base)
+        return this.quoteService.paginateUsersQuotes(user[0], page, condition, ['user'], base)
     }
 
     @Post('myquote')
@@ -72,6 +83,9 @@ export class UsersController {
         const user = await this.userService.findOneRelations({id: user_id})
         return this.quoteService.create({
             quote: body.quote,
+            likes: 0,
+            dislikes: 0,
+            rating: 0,
             user: user[0]
         })
     }

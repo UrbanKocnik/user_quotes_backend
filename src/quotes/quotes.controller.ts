@@ -151,17 +151,6 @@ export class QuotesController {
     }
 
     @UseGuards(AuthGuard)
-    @Get('liked')
-    async liked(
-        @Query('page') page = 1,
-        @Req() request: Request,
-    ){
-        const id = await this.authService.userId(request)
-        const user = await this.userService.findOneRelations({id})
-        return this.voteService.paginateLiked(user[0], page)
-    }
-
-    @UseGuards(AuthGuard)
     @Get('votes')
     async allVotes(
         @Req() request: Request,

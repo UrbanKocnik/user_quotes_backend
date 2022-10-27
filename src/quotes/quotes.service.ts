@@ -38,12 +38,37 @@ export class QuoteService extends AbstractService {
         const take = base * page;
         const [data, total] = await this.quoteRepository.findAndCount({
             order:{
-                quote:{
-                    [condition]: 'DESC'
-                }
+                [condition]: 'DESC'
             },
             where:{
                 user
+            },
+            take, 
+            relations
+        });
+        return {
+            
+            data: data,
+            meta:{
+                total,
+                page,
+                last_page: Math.ceil(total / take)
+            }
+        }
+    }
+
+    async paginateLiked(user: User, page = 1, condition = "likes", relations: any[] = ['user', 'votes'], base = 4): Promise<PaginatedResult>{
+
+        const take = base * page;
+        const [data, total] = await this.repository.findAndCount({
+            order:{
+                [condition]: 'DESC'
+            },
+            where:{
+                votes:{
+                    user,
+                    rating: true
+                }            
             },
             take, 
             relations
