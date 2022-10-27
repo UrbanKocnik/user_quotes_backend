@@ -51,6 +51,18 @@ export class UsersController {
         return this.userService.findOneRelations({id})
     }
 
+    @Get('usersquotes')
+    async getQuotes(
+        @Req() request: Request,
+        @Query('page') page = 1,
+        @Query('condition') condition = "likes",
+        @Query('base') base = 4)
+    {
+        const user_id = await this.authService.userId(request)
+        const user = await this.userService.findOneRelations({id: user_id})
+        return this.quoteService.paginateUsersQuotes(user[0], page, condition, [], base)
+    }
+
     @Post('myquote')
     async addQuote(
         @Body() body: QuoteUpdateDto,
