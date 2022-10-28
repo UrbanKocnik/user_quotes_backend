@@ -40,6 +40,10 @@ export class UsersController {
         @Body() body: UserUpdateDto,
         @Req() request: Request){
 
+        if(body.email === '' && body.first_name === '' && body.last_name === ''){
+            console.log('empty body')
+            return
+        }
         const id = await this.authService.userId(request);
         await this.userService.update(id, body)
         return this.userService.findOneRelations({id})
@@ -63,6 +67,10 @@ export class UsersController {
         }
         const hash = await bcrypt.hash(password, 12);
         await this.userService.update(id, {
+            first_name: user[0].first_name,
+            last_name: user[0].last_name,
+            email: user[0].email,
+            image: user[0].image,
             password: hash
         })
         return this.userService.findOneRelations({id})
