@@ -55,6 +55,16 @@ export class UsersController {
         return this.userService.findOneRelations({id})
     }
 
+    @Put('update-image')
+    async updateImage(
+        @Body() image: string,
+        @Req() request: Request){
+
+        const id = await this.authService.userId(request);
+        await this.userService.update(id, image)
+        return this.userService.findOneRelations({id})
+    }
+
     @Put('update-password')
     async updatePassword(
         @Body('current_password') current_password: string,
@@ -156,12 +166,6 @@ export class UsersController {
                 error: "Not your quote!"
             })
         }
-    }
-
-    @Get('uploads/:path')
-    async getImage(@Param('path') path, 
-    @Res() res: Response){
-        res.sendFile(path, {root:'uploads'})
     }
 
     @Get('user/:id')
