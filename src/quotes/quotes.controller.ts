@@ -26,6 +26,16 @@ export class QuotesController {
         return await this.voteService.findRatings(quote[0], user[0])
     }
 
+    @UseGuards(AuthGuard)
+    @Get('user/liked/:id')
+    async liked(
+        @Query('page') page = 1,
+        @Param('id') id:number
+    ){
+        const user = await this.userService.findOneRelations({id})
+        return this.quoteService.paginateLiked(user[0], page)
+    }
+
     @Get('random')
     async random(){
         const quote = await this.quoteService.randomQuote()

@@ -31,6 +31,16 @@ export class UsersController {
         return this.quoteService.paginateLiked(user[0], page)
     }
 
+    @UseGuards(AuthGuard)
+    @Get(':id/liked')
+    async likedOfUser(
+        @Query('page') page = 1,
+        @Param('id') id:number,
+    ){
+        const user = await this.userService.findOneRelations({id})
+        return this.quoteService.paginateLiked(user[0], page)
+    }
+
     @Put('update-info')
     async updateInfo(
         @Body() body: UserUpdateDto,
@@ -70,6 +80,17 @@ export class UsersController {
             password: hash
         })
         return this.userService.findOneRelations({id})
+    }
+
+    @Get('usersquotes/:id')
+    async getUserQuotes(
+        @Query('page') page = 1,
+        @Query('condition') condition = "likes",
+        @Query('base') base = 4,
+        @Param('id') id:number)
+    {
+        const user = await this.userService.findOneRelations({id})
+        return this.quoteService.paginateUsersQuotes(user[0], page, condition, ['user'], base)
     }
 
     @Get('usersquotes')
@@ -141,6 +162,11 @@ export class UsersController {
     async getImage(@Param('path') path, 
     @Res() res: Response){
         res.sendFile(path, {root:'uploads'})
+    }
+
+    @Get('user/:id')
+    async user(@Param('id') id: number){
+        return this.userService.findOneRelations({id}, ['votes', 'quotes'])
     }
 
     @Get()
