@@ -1,8 +1,8 @@
-import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthService } from 'src/auth/auth.service';
-import {Request} from 'express'
+import {Request, Response} from 'express'
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { UsersService } from './users.service';
 import { QuoteService } from 'src/quotes/quotes.service';
@@ -18,11 +18,7 @@ export class UsersController {
         private authService: AuthService,
         private quoteService: QuoteService){}
 
-    @Get()
-    async me(@Req() request: Request){
-        const id = await this.authService.userId(request);
-        return this.userService.findOneRelations({id}, ['votes', 'quotes'])
-    }
+
 
     @UseGuards(AuthGuard)
     @Get('liked')
@@ -139,5 +135,17 @@ export class UsersController {
                 error: "Not your quote!"
             })
         }
+    }
+
+    @Get('uploads/:path')
+    async getImage(@Param('path') path, 
+    @Res() res: Response){
+        res.sendFile(path, {root:'uploads'})
+    }
+
+    @Get()
+    async me(@Req() request: Request){
+        const id = await this.authService.userId(request);
+        return this.userService.findOneRelations({id}, ['votes', 'quotes'])
     }
 }
