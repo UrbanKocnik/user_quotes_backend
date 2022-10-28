@@ -11,6 +11,7 @@ import { CommonModule } from './common/common.module';
 import { QuoteService } from './quotes/quotes.service';
 import { QuotesModule } from './quotes/quotes.module';
 import { VotesModule } from './votes/votes.module';
+import { UploadController } from './upload/upload.controller';
 import * as Joi from '@hapi/joi';
 
 @Module({
@@ -24,7 +25,7 @@ import * as Joi from '@hapi/joi';
       PORT: Joi.number(),
     })
   }), DatabaseModule, UsersModule, AuthModule, CommonModule, QuotesModule, VotesModule],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule {}
