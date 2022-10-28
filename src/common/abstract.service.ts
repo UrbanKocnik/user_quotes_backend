@@ -50,7 +50,7 @@ export abstract class AbstractService {
             meta:{
                 total,
                 page,
-                last_page: Math.ceil(total / take)
+                last_page: Math.ceil(total / base)
             }
         }
     }

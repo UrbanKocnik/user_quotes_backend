@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractService } from 'src/common/abstract.service';
-import { PaginatedResult } from 'src/common/paginated-result.interface';
 import Quote from 'src/database/entity/quote.entity';
 import User from 'src/database/entity/user.entity';
 import Vote from 'src/database/entity/votes.entity';

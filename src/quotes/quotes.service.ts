@@ -4,7 +4,7 @@ import { AbstractService } from 'src/common/abstract.service';
 import { PaginatedResult } from 'src/common/paginated-result.interface';
 import Quote from 'src/database/entity/quote.entity';
 import User from 'src/database/entity/user.entity';
-import { Repository, SimpleConsoleLogger } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RatingUpdateDto } from './dtos/rating-update.dto';
 
 @Injectable()
@@ -52,7 +52,7 @@ export class QuoteService extends AbstractService {
             meta:{
                 total,
                 page,
-                last_page: Math.ceil(total / take)
+                last_page: Math.ceil(total / base)
             }
         }
     }
