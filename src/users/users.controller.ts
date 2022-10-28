@@ -47,15 +47,21 @@ export class UsersController {
 
     @Put('update-password')
     async updatePassword(
+        @Body('current_password') current_password: string,
         @Body('password') password: string,
         @Body('password_confirm') password_confirm: string,
         @Req() request: Request){
+        
+        const id = await this.authService.userId(request);
+        const user = await this.userService.findOneRelations({id})
+
+        if(!await bcrypt.compare(current_password, user[0].password)){
+            throw new BadRequestException('Wrong password. Cannot change without confirming your old password.');
+        }
         if(password !== password_confirm){
             throw new BadRequestException('Passwords do not match');
         }
-        const id = await this.authService.userId(request);
         const hash = await bcrypt.hash(password, 12);
-                   
         await this.userService.update(id, {
             password: hash
         })
