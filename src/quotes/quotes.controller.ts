@@ -181,7 +181,7 @@ export class QuotesController {
     async all(
         @Query('page') page = 1,
         @Query('condition') condition = "likes",
-        @Query('base') base = 2
+        @Query('base') base = 3
     ){
         return await this.quoteService.paginate(page, condition, ['votes', 'user'], base);
     }
