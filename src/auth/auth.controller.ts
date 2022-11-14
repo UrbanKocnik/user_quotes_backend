@@ -20,8 +20,14 @@ export class AuthController {
     @Post('register')
     async register(@Body() body: RegisterDto){
         //checking if pw has typo
+        const user = await this.userService.findOneRelations({email: body.email});
+        if(user.length > 0){
+            //throw new NotFoundException('user not found');
+            return 'email exists'
+        }
         if(body.password !== body.password_confirm){
-            throw new BadRequestException('Passwords do not match');
+            //throw new BadRequestException('Passwords do not match');
+            return 'Passwords do not match'
         }
         //hashing pw
         const saltOrRounds = 12;
@@ -48,12 +54,14 @@ export class AuthController {
     ){
         //posle v service mail da najde pravega userja
         const user = await this.userService.findOneRelations({email});
-        if(!user){
-            throw new NotFoundException('user not found');
+        if(user.length === 0){
+            //throw new NotFoundException('user not found');
+            return 'wrong info'
         }
         //preveri ce je poslan password enak shranjenemu passwordu userja
         if(!await bcrypt.compare(password, user[0].password)){
-            throw new BadRequestException('password not match');
+            return 'wrong info'
+            //throw new BadRequestException('password not match');
         }
 
         const jwt = await this.jwtService.signAsync({id: user[0].id})
