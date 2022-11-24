@@ -40,7 +40,7 @@ export class AuthController {
             first_name: body.first_name,
             last_name: body.last_name,
             email: body.email,
-            image: "http://localhost:4000/api/uploads/default.png",
+            image: "/api/uploads/default.png",
             password: hash,
         });
     }
